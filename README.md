@@ -68,6 +68,15 @@ python -m mindsearch.app --lang en --model_format internlm_server --search_engin
   Please set your Web Search engine API key as the `WEB_SEARCH_API_KEY` environment variable unless you are using `DuckDuckGo`, or `TencentSearch` that requires secret id as `TENCENT_SEARCH_SECRET_ID` and secret key as `TENCENT_SEARCH_SECRET_KEY`.
 - `--asy`: deploy asynchronous agents.
 
+When selecting `--search_engine GoogleSearch`, optionally set `SERPER_BASE_URL`
+to a Serper-compatible base URL without a search path. If unset, Lagent's
+original `https://google.serper.dev` endpoint is unchanged. `WEB_SEARCH_API_KEY`
+remains the API key setting. Both synchronous and asynchronous browsers use
+the override, preserving Lagent's GET requests, result filtering, retries, and
+page fetching. The selected provider must support the configured search type.
+
+Support any Serper.dev-compatible endpoint (like litescrape.com, serpbase.dev, serpensapi.org, and others)
+
 ### Step4: Setup MindSearch Frontend
 
 Providing following frontend interfaces,

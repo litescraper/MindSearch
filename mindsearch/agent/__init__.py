@@ -21,6 +21,7 @@ from .mindsearch_prompt import (
     searcher_system_prompt_cn,
     searcher_system_prompt_en,
 )
+from .serper_search import ConfigurableGoogleSearch
 
 LLM = {}
 
@@ -56,6 +57,18 @@ def init_agent(lang="cn",
         topk=6,
         api_key=os.getenv("WEB_SEARCH_API_KEY"),
     ))]
+    base_url = os.getenv("SERPER_BASE_URL")
+    if search_engine == "GoogleSearch" and base_url:
+        browser = create_object(plugins[0])
+        searcher = browser.searcher
+        browser.searcher = ConfigurableGoogleSearch(
+            base_url=base_url,
+            api_key=searcher.api_key,
+            topk=searcher.topk,
+            black_list=searcher.black_list,
+            **searcher.kwargs)
+        plugins[0] = browser
+
     agent = (AsyncMindSearchAgent if use_async else MindSearchAgent)(
         llm=llm,
         template=date,
